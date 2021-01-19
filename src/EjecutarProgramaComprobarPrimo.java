@@ -9,7 +9,7 @@ import java.util.List;
  * Programa principal que ejecuta ComprobarPrimo.java
  * 
  * @author David Bernabé
- * @version 1.1
+ * @version 1.2
  */
 public class EjecutarProgramaComprobarPrimo {
  
@@ -19,6 +19,8 @@ public class EjecutarProgramaComprobarPrimo {
         String nombreFichero = null;
         List<Long> numeros = new ArrayList<>();
         List<Thread> hilos = new ArrayList<>();
+        int numeroHilos;
+        int numeroHilosFinalizados = 0;
         
         // Obtener fichero de argumentos de línea
         if (args.length == 0) {
@@ -43,8 +45,11 @@ public class EjecutarProgramaComprobarPrimo {
             while ( (cadena = b.readLine()) != null) {
                 try {
                     numeros.add(Long.parseLong(cadena));
-                } catch (Exception e) {}
+                } catch (NumberFormatException e) {}   
             }
+            
+            // Cerrar el fichero una vez terminado el trabajo
+            fichero.close();
             
             // Logs por pantalla
             System.out.println("Números leídos: " + numeros);
@@ -56,11 +61,31 @@ public class EjecutarProgramaComprobarPrimo {
                 hilos.add(numeroComprobar);
             }
             
+            // Guardamos los números de hilos para saber cuántos tienen que terminar
+            numeroHilos = hilos.size();
+            System.out.println("Hilos " + numeroHilos);
+            
             // Posteriormente se ejecutarán todos los hilos
             for (Thread hilo : hilos) {
                 hilo.start();
             }
-        
+            
+            // Cuando finalice la ejecución del hilo se sumará al contador de hilos finalizados
+            for (Thread hilo : hilos) {
+                try {
+                    hilo.join();
+                } catch (InterruptedException e) {
+                    System.err.println(e.getMessage());
+                } finally {
+                   numeroHilosFinalizados++;
+                }
+            }
+            
+            // Si todos los hilos han finalizado se mostrará por pantalla que el programa ha terminado
+            if (numeroHilos == numeroHilosFinalizados) {
+                System.out.println("Analizados todos los números. Fin del programa.");
+            } 
+            
         } catch (IOException e) {
             System.err.println(e.getMessage());
         }
