@@ -52,7 +52,6 @@ public class EjecutarProgramaComprobarPrimo {
             fichero.close();
             
             // Logs por pantalla
-            System.out.println("Números leídos: " + numeros);
             System.out.println("Lanzando comprobadores concurrentes de primalildad.\n");
             
             // Cada elemento de números se usará para crear un objeto de tipo ComprobadorPrimo y posteriormente se meterá en una lista de tipo Thread
@@ -63,7 +62,6 @@ public class EjecutarProgramaComprobarPrimo {
             
             // Guardamos los números de hilos para saber cuántos tienen que terminar
             numeroHilos = hilos.size();
-            System.out.println("Hilos " + numeroHilos);
             
             // Posteriormente se ejecutarán todos los hilos
             for (Thread hilo : hilos) {
