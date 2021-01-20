@@ -19,7 +19,12 @@ public class EjecutarProgramaComprobarPrimo {
     public static BufferedReader b = null;
     public static List<Long> numerosPrimos = new ArrayList<>();
     
-    public static void ingresarNumeroPrimo(Long numero) {
+    /**
+     * Método que añade el número primo a la lista
+     * Este método pertecene a una SECCIÓN CRÍTICA por lo que es recomendable usar synchronize
+     * @param numero Número primo para añadir a la lista
+     */
+    public synchronized static void ingresarNumeroPrimo(Long numero) {
         numerosPrimos.add(numero);
     }
     
