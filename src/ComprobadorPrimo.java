@@ -8,7 +8,7 @@ public class ComprobadorPrimo extends Thread {
     
     // Atributos
     private final long numero;
-    private long divisor=0;
+    private long divisor = 0;
 
     /**
      * Constructor que pide un número de tipo Long
@@ -20,15 +20,14 @@ public class ComprobadorPrimo extends Thread {
     
     /**
      * Método sobreescrito run de Thread que implementa el método esPrimo
+     * ACTUALIZACIÓN: ya no se debe mostrar los resultados por pantalla, sino guardarlos en una estructura de datos
      */
     @Override
     public void run() {
         if (esPrimo(numero)) {
-            System.out.printf ("%10d es primo.\n", this.numero);
-        } else {
-            System.out.printf ("%10d no es primo. Es divisible entre %d.\n",
-                    this.numero, this.divisor);
-        }        
+            //System.out.printf ("%10d es primo.\n", this.numero);
+            EjecutarProgramaComprobarPrimo.ingresarNumeroPrimo(numero);
+        }      
     }
     
     /**
@@ -37,8 +36,8 @@ public class ComprobadorPrimo extends Thread {
      * @return Verdadero o Falso si el número es o no primo
      */
     boolean esPrimo(long numero) {
-        boolean primo= true;
-        long candidatoDivisor= 2;
+        boolean primo = true;
+        long candidatoDivisor = 2;
         while (candidatoDivisor < numero && primo) {
             try {
                 Thread.sleep (0, 2);
@@ -46,8 +45,8 @@ public class ComprobadorPrimo extends Thread {
                 System.out.printf ("Error en sleep: %s.\n", ex.getMessage());
             }
             if (numero % candidatoDivisor == 0) {
-                primo= false;
-                divisor= candidatoDivisor;
+                primo = false;
+                divisor = candidatoDivisor;
             } else
                 candidatoDivisor++;                       
         }        
@@ -56,20 +55,21 @@ public class ComprobadorPrimo extends Thread {
 
     // Una forma más óptima de llevar a cabo la comprobación
     // (el problema es que es demasiado rápida y para este ejericio interesa que sea más "lenta"
-/*    boolean esPrimo(long numero) {
-        boolean primo= true;
-        long candidatoDivisor= 3;
+    /*  
+    boolean esPrimo(long numero) {
+        boolean primo = true;
+        long candidatoDivisor = 3;
         if (numero % 2 == 0) {
-            primo= false;
+            primo = false;
         }
         while (candidatoDivisor < (int) Math.sqrt(numero) && !primo) {
             if (numero % candidatoDivisor == 0)
-                primo= false;
+                primo = false;
             else
-                candidatoDivisor +=2;                       
+                candidatoDivisor += 2;                       
         }        
         return primo;
     }
-*/    
+    */    
     
 }

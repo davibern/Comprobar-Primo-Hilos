@@ -10,13 +10,18 @@ import java.util.List;
  * Programa principal que ejecuta ComprobarPrimo.java
  * 
  * @author David Bernabé
- * @version 1.2
+ * @version 1.3
  */
 public class EjecutarProgramaComprobarPrimo {
     
     // Variables
     public static FileReader fichero = null;
     public static BufferedReader b = null;
+    public static List<Long> numerosPrimos = new ArrayList<>();
+    
+    public static void ingresarNumeroPrimo(Long numero) {
+        numerosPrimos.add(numero);
+    }
     
     /**
      * Método que lanza el programa para comprobar números primos
@@ -57,6 +62,7 @@ public class EjecutarProgramaComprobarPrimo {
             }
             
             // Logs por pantalla
+            System.out.println("Números leídos: " + numeros + "\n");
             System.out.println("Lanzando comprobadores concurrentes de primalildad.\n");
             
             // Cada elemento de números se usará para crear un objeto de tipo ComprobadorPrimo y posteriormente se meterá en una lista de tipo Thread
@@ -76,15 +82,12 @@ public class EjecutarProgramaComprobarPrimo {
                     hilo.join();
                 } catch (InterruptedException e) {
                     System.err.println(e.getMessage());
-                } finally {
-                   numeroHilosFinalizados++;
                 }
             }
-            
-            // Si todos los hilos han finalizado se mostrará por pantalla que el programa ha terminado
-            if (numeroHilosFinalizados == hilos.size()) {
-                System.out.println("Analizados todos los números. Fin del programa.");
-            } 
+
+            // Salidas por pantalla del final de ejecución
+            System.out.println(numerosPrimos);
+            System.out.println("\nAnalizados todos los números. Fin del programa.");
             
         } catch (FileNotFoundException e) {
             System.err.println(e.getMessage());
