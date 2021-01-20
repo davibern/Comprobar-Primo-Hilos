@@ -1,5 +1,6 @@
 // Librerías
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -12,14 +13,21 @@ import java.util.List;
  * @version 1.2
  */
 public class EjecutarProgramaComprobarPrimo {
- 
+    
+    // Variables
+    public static FileReader fichero = null;
+    public static BufferedReader b = null;
+    
+    /**
+     * Método que lanza el programa para comprobar números primos
+     * @param args Fichero de texto con los números a analizar
+     */
     public static void main(String[] args) {
         
         // Variables
         String nombreFichero = null;
         List<Long> numeros = new ArrayList<>();
         List<Thread> hilos = new ArrayList<>();
-        int numeroHilos;
         int numeroHilosFinalizados = 0;
         
         // Obtener fichero de argumentos de línea
@@ -33,8 +41,8 @@ public class EjecutarProgramaComprobarPrimo {
         // Abrir fichero y almacenar en conjuntod de datos
         try {
             String cadena = null;
-            FileReader fichero = new FileReader(nombreFichero);
-            BufferedReader b = new BufferedReader(fichero);
+            fichero = new FileReader(nombreFichero);
+            b = new BufferedReader(fichero);
             
             // Menú
             System.out.println("COMPROBACIÓN DE NÚMEROS PRIMOS");
@@ -48,9 +56,6 @@ public class EjecutarProgramaComprobarPrimo {
                 } catch (NumberFormatException e) {}   
             }
             
-            // Cerrar el fichero una vez terminado el trabajo
-            fichero.close();
-            
             // Logs por pantalla
             System.out.println("Lanzando comprobadores concurrentes de primalildad.\n");
             
@@ -59,9 +64,6 @@ public class EjecutarProgramaComprobarPrimo {
                 ComprobadorPrimo numeroComprobar = new ComprobadorPrimo(numero);
                 hilos.add(numeroComprobar);
             }
-            
-            // Guardamos los números de hilos para saber cuántos tienen que terminar
-            numeroHilos = hilos.size();
             
             // Posteriormente se ejecutarán todos los hilos
             for (Thread hilo : hilos) {
@@ -80,12 +82,23 @@ public class EjecutarProgramaComprobarPrimo {
             }
             
             // Si todos los hilos han finalizado se mostrará por pantalla que el programa ha terminado
-            if (numeroHilos == numeroHilosFinalizados) {
+            if (numeroHilosFinalizados == hilos.size()) {
                 System.out.println("Analizados todos los números. Fin del programa.");
             } 
             
+        } catch (FileNotFoundException e) {
+            System.err.println(e.getMessage());
         } catch (IOException e) {
             System.err.println(e.getMessage());
+        } finally {
+            if (b != null) {
+                try {
+                    fichero.close();
+                    b.close();
+                } catch (IOException e) {
+                    System.err.println(e.getMessage());
+                }
+            }
         }
         
     }
